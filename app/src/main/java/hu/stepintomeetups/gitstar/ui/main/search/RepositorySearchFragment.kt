@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.fragment_repository_search.*
 class RepositorySearchFragment : Fragment(), RepositoryClickListener {
     private lateinit var adapter: RepositoryListAdapter
 
-    private var viewModel: MyRepositoriesViewModel? = null
+    private var viewModel: RepositorySearchViewModel? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_repository_search, container, false)
@@ -58,7 +58,7 @@ class RepositorySearchFragment : Fragment(), RepositoryClickListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this@RepositorySearchFragment).get(MyRepositoriesViewModel::class.java)
+        viewModel = ViewModelProviders.of(this@RepositorySearchFragment).get(RepositorySearchViewModel::class.java)
 
         viewModel?.data?.observe(this@RepositorySearchFragment, Observer {
             when (it) {

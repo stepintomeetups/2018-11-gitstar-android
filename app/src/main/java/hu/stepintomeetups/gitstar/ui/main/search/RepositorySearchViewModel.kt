@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
 
-class MyRepositoriesViewModel : CoroutineViewModel() {
+class RepositorySearchViewModel : CoroutineViewModel() {
     var queryString: String? = null
 
     val data = MutableLiveData<DataRequestState<SearchRepositoriesResult>>()
@@ -24,12 +24,12 @@ class MyRepositoriesViewModel : CoroutineViewModel() {
     fun performSearch(q: String) {
         queryString = q
 
-        data.value = DataRequestState.Loading()
-
         currentJob?.cancel()
 
         currentJob = launch(Dispatchers.IO) {
             delay(500)
+
+            data.postValue(DataRequestState.Loading())
 
             // the API returns an error when q is missing or empty – we have to build a fake response instead
             if (q.isEmpty()) {

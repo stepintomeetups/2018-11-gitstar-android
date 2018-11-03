@@ -61,7 +61,8 @@ class RepositoryIconHelper {
             val text = nameMap[repo.language] ?: repo.language ?: "?"
 
             val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
-                textSize = calculateFitTextSize(this, w * 0.75f, text).coerceIn(6.0f, 15.0f) * multiplier
+                textSize = 15.0f * multiplier
+                textSize = calculateFitTextSize(this, w * 0.66f, text).coerceIn(6.0f * multiplier, 17.0f * multiplier)
                 color = calculateTextColor(backgroundColor)
                 textAlign = Paint.Align.CENTER
             }
