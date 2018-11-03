@@ -1,6 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">GitStar</string>
     <string name="tab_my_repositories">My Repositories</string>
     <string name="tab_search">Search</string>
-    <string name="search_hint">Search repositories...</string>
 </resources>
