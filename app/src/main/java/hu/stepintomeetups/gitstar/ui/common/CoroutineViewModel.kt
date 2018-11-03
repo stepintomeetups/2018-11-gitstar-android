@@ -1,3 +1,8 @@
+/*
+ * Created by Tamás Szincsák on 2018-11-02.
+ * Copyright (c) 2018 Tamás Szincsák.
+ */
+
 package hu.stepintomeetups.gitstar.ui.common
 
 import androidx.lifecycle.ViewModel

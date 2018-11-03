@@ -1,3 +1,8 @@
+/*
+ * Created by Tamás Szincsák on 2018-11-02.
+ * Copyright (c) 2018 Tamás Szincsák.
+ */
+
 package hu.stepintomeetups.gitstar.api
 
 import com.google.gson.FieldNamingPolicy
@@ -15,7 +20,6 @@ import retrofit2.http.Path
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Query
-
 
 interface GitHubService {
     @GET("user/repos")
