@@ -2,6 +2,6 @@
 <resources>
     <color name="colorPrimary">#880e4f</color>
     <color name="colorPrimaryDark">#560027</color>
-    <color name="colorAccent">#ffc400</color>
+    <color name="colorAccent">#f57c00</color>
     <color name="markdown_block_color">#f5d0e1</color>
 </resources>

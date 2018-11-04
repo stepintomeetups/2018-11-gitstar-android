@@ -9,4 +9,5 @@
     <string name="section_latest_commits">Latest commits</string>
     <string name="section_info">General info</string>
     <string name="not_implemented_yet">Not implemented yet.</string>
+    <string name="no_commits_yet">No commits yet.</string>
 </resources>

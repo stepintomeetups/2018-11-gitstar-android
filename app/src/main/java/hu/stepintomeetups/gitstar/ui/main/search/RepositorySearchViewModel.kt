@@ -20,20 +20,17 @@ import retrofit2.HttpException
 import java.io.IOException
 
 class RepositorySearchViewModel : CoroutineViewModel() {
-    var queryString: String? = null
-
     val data = MutableLiveData<DataRequestState<SearchRepositoriesResult>>()
 
     private var currentJob: Job? = null
 
     @MainThread
-    fun performSearch(q: String) {
-        queryString = q
-
+    fun performSearch(q: String, immediate: Boolean) {
         currentJob?.cancel()
 
         currentJob = launch(Dispatchers.IO) {
-            delay(500)
+            if (!immediate)
+                delay(500)
 
             data.postValue(DataRequestState.Loading())
 

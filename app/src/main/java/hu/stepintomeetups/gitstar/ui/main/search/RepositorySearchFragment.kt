@@ -16,6 +16,8 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.arlib.floatingsearchview.FloatingSearchView
+import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion
 import hu.stepintomeetups.gitstar.R
 import hu.stepintomeetups.gitstar.api.entities.Repo
 import hu.stepintomeetups.gitstar.ui.common.DataRequestState
@@ -45,8 +47,16 @@ class RepositorySearchFragment : Fragment(), RepositoryClickListener {
         recyclerView.adapter = adapter
 
         floatingSearchView.setOnQueryChangeListener { _, new ->
-            viewModel?.performSearch(new)
+            viewModel?.performSearch(new, false)
         }
+
+        floatingSearchView.setOnSearchListener(object : FloatingSearchView.OnSearchListener {
+            override fun onSuggestionClicked(searchSuggestion: SearchSuggestion?) {}
+
+            override fun onSearchAction(currentQuery: String?) {
+                viewModel?.performSearch(floatingSearchView.query, true)
+            }
+        })
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -68,15 +78,15 @@ class RepositorySearchFragment : Fragment(), RepositoryClickListener {
         viewModel?.data?.observe(this@RepositorySearchFragment, Observer {
             when (it) {
                 is DataRequestState.Loading -> {
-                    progressBar.show()
+                    progressBar.visibility = View.VISIBLE
                     recyclerView.visibility = View.GONE
                 }
                 is DataRequestState.Error -> {
-                    progressBar.hide()
+                    progressBar.visibility = View.GONE
                     recyclerView.visibility = View.GONE
                 }
                 is DataRequestState.Success -> {
-                    progressBar.hide()
+                    progressBar.visibility = View.GONE
                     recyclerView.visibility = View.VISIBLE
                     adapter.items = it.data.items
                 }

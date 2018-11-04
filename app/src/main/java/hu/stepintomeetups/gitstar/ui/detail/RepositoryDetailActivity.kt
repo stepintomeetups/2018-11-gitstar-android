@@ -69,13 +69,13 @@ class RepositoryDetailActivity : AppCompatActivity(), CoroutineScope {
         supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(recyclerView.context)
-        recyclerView.itemAnimator = null
-        recyclerView.addItemDecoration(DividerItemDecoration(recyclerView.context, DividerItemDecoration.VERTICAL))
+        commitsRecyclerView.setHasFixedSize(true)
+        commitsRecyclerView.layoutManager = LinearLayoutManager(commitsRecyclerView.context)
+        commitsRecyclerView.itemAnimator = null
+        commitsRecyclerView.addItemDecoration(DividerItemDecoration(commitsRecyclerView.context, DividerItemDecoration.VERTICAL))
 
         adapter = CommitListAdapter()
-        recyclerView.adapter = adapter
+        commitsRecyclerView.adapter = adapter
 
         viewReadmeButton.setOnClickListener {
             Toast.makeText(this@RepositoryDetailActivity, R.string.not_implemented_yet, Toast.LENGTH_SHORT).show()
@@ -104,6 +104,9 @@ class RepositoryDetailActivity : AppCompatActivity(), CoroutineScope {
                     descriptionView.text = it.data.repo.description
                     descriptionView.visibility = if (it.data.repo.description?.isNotBlank() == true) View.VISIBLE else View.GONE
 
+                    noCommitsView.visibility = if (it.data.commits.isEmpty()) View.VISIBLE else View.GONE
+                    commitsRecyclerView.visibility = if (!it.data.commits.isEmpty()) View.VISIBLE else View.GONE
+
                     adapter?.items = it.data.commits
 
                     if (it.data.readme != null) {
@@ -130,8 +133,7 @@ class RepositoryDetailActivity : AppCompatActivity(), CoroutineScope {
 
         title = RepoNameHelper.formatRepoName(toolbar.context, repository)
 
-        if (savedInstanceState == null)
-            viewModel?.initWithRepository(repository.owner.login, repository.name)
+        viewModel?.initWithRepository(repository.owner.login, repository.name)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

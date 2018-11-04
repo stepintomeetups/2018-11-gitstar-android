@@ -65,8 +65,7 @@ class RepositoryListFragment : Fragment(), RepositoryClickListener {
             }
         })
 
-        if (savedInstanceState == null)
-            viewModel.refreshData()
+        viewModel.init()
     }
 
     override fun onRepositoryClick(repo: Repo) {

@@ -20,8 +20,15 @@ import java.io.IOException
 class MyRepositoriesViewModel : CoroutineViewModel() {
     val data = MutableLiveData<DataRequestState<List<Repo>>>()
 
+    private var alreadyInitialized = false
+
     @MainThread
-    fun refreshData() {
+    fun init() {
+        if (alreadyInitialized)
+            return
+
+        alreadyInitialized = true
+
         data.value = DataRequestState.Loading()
 
         launch(Dispatchers.IO) {

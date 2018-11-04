@@ -20,11 +20,17 @@ import java.io.IOException
 class RepositoryDetailViewModel : CoroutineViewModel() {
     val data = MutableLiveData<DataRequestState<RepoDetails>>()
 
+    private var alreadyInitialized = false
     private var ownerName: String? = null
     private var repositoryName: String? = null
 
     @MainThread
     fun initWithRepository(ownerName: String, repositoryName: String) {
+        if (alreadyInitialized)
+            return
+
+        alreadyInitialized = true
+
         this.ownerName = ownerName
         this.repositoryName = repositoryName
 
