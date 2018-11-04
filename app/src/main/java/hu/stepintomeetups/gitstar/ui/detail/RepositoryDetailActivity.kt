@@ -93,6 +93,11 @@ class RepositoryDetailActivity : AppCompatActivity(), CoroutineScope {
                         true -> viewModel?.starRepository()?.await()
                         false -> viewModel?.unstarRepository()?.await()
                     }
+
+                    if (needToStar)
+                        Toast.makeText(this@RepositoryDetailActivity, R.string.repository_successfully_starred, Toast.LENGTH_SHORT).show()
+                    else
+                        Toast.makeText(this@RepositoryDetailActivity, R.string.repository_successfully_unstarred, Toast.LENGTH_SHORT).show()
                 } catch (e: Throwable) {
                     when (e) {
                         is IOException -> {
@@ -103,12 +108,9 @@ class RepositoryDetailActivity : AppCompatActivity(), CoroutineScope {
                         }
                         else -> throw e
                     }
+                } finally {
+                    starButton.isEnabled = true
                 }
-
-                if (needToStar)
-                    Toast.makeText(this@RepositoryDetailActivity, R.string.repository_successfully_starred, Toast.LENGTH_SHORT).show()
-                else
-                    Toast.makeText(this@RepositoryDetailActivity, R.string.repository_successfully_unstarred, Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -124,14 +126,17 @@ class RepositoryDetailActivity : AppCompatActivity(), CoroutineScope {
             when (it) {
                 is DataRequestState.Loading -> {
                     progressBar.visibility = View.VISIBLE
+                    errorView.visibility = View.GONE
                     mainContainer.visibility = View.GONE
                 }
                 is DataRequestState.Error -> {
                     progressBar.visibility = View.GONE
+                    errorView.visibility = View.VISIBLE
                     mainContainer.visibility = View.GONE
                 }
                 is DataRequestState.Success -> {
                     progressBar.visibility = View.GONE
+                    errorView.visibility = View.GONE
                     mainContainer.visibility = View.VISIBLE
 
                     it.data.repo.observe(this@RepositoryDetailActivity, Observer { repo ->

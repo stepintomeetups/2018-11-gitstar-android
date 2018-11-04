@@ -51,14 +51,17 @@ class RepositoryListFragment : Fragment(), RepositoryClickListener {
             when (it) {
                 is DataRequestState.Loading -> {
                     progressBar.visibility = View.VISIBLE
+                    errorView.visibility = View.GONE
                     recyclerView.visibility = View.GONE
                 }
                 is DataRequestState.Error -> {
                     progressBar.visibility = View.GONE
+                    errorView.visibility = View.VISIBLE
                     recyclerView.visibility = View.GONE
                 }
                 is DataRequestState.Success -> {
                     progressBar.visibility = View.GONE
+                    errorView.visibility = View.GONE
                     recyclerView.visibility = View.VISIBLE
                     adapter.items = it.data
                 }
