@@ -64,8 +64,6 @@ class RepositoryListFragment : Fragment(), RepositoryClickListener {
                 }
             }
         })
-
-        viewModel.init()
     }
 
     override fun onRepositoryClick(repo: Repo) {

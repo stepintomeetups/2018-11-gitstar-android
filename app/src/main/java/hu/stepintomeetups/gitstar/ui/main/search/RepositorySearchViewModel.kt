@@ -24,6 +24,10 @@ class RepositorySearchViewModel : CoroutineViewModel() {
 
     private var currentJob: Job? = null
 
+    init {
+        data.value = createEmptyResponse()
+    }
+
     @MainThread
     fun performSearch(q: String, immediate: Boolean) {
         currentJob?.cancel()
@@ -36,7 +40,7 @@ class RepositorySearchViewModel : CoroutineViewModel() {
 
             // the API returns an error when q is missing or empty – we have to build a fake response instead
             if (q.isEmpty()) {
-                data.postValue(DataRequestState.Success(SearchRepositoriesResult(0, false, ArrayList())))
+                data.postValue(createEmptyResponse())
                 return@launch
             }
 
@@ -53,5 +57,9 @@ class RepositorySearchViewModel : CoroutineViewModel() {
                 }
             }
         }
+    }
+
+    private fun createEmptyResponse(): DataRequestState<SearchRepositoriesResult> {
+        return DataRequestState.Success(SearchRepositoriesResult(0, false, ArrayList()))
     }
 }

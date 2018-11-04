@@ -5,7 +5,6 @@
 
 package hu.stepintomeetups.gitstar.ui.main.my
 
-import androidx.annotation.MainThread
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.JsonSyntaxException
 import hu.stepintomeetups.gitstar.api.GitHubService
@@ -20,15 +19,7 @@ import java.io.IOException
 class MyRepositoriesViewModel : CoroutineViewModel() {
     val data = MutableLiveData<DataRequestState<List<Repo>>>()
 
-    private var alreadyInitialized = false
-
-    @MainThread
-    fun init() {
-        if (alreadyInitialized)
-            return
-
-        alreadyInitialized = true
-
+    init {
         data.value = DataRequestState.Loading()
 
         launch(Dispatchers.IO) {

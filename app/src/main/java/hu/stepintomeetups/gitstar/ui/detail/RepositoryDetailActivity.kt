@@ -92,7 +92,9 @@ class RepositoryDetailActivity : AppCompatActivity(), CoroutineScope {
             Toast.makeText(this@RepositoryDetailActivity, R.string.not_implemented_yet, Toast.LENGTH_SHORT).show()
         }
 
-        viewModel = ViewModelProviders.of(this@RepositoryDetailActivity).get(RepositoryDetailViewModel::class.java)
+        val repository = intent.getParcelableExtra<Repo>(EXTRA_REPOSITORY)
+
+        viewModel = ViewModelProviders.of(this@RepositoryDetailActivity, RepositoryDetailViewModel.Factory(repository.owner.login, repository.name)).get(RepositoryDetailViewModel::class.java)
 
         viewModel?.data?.observe(this@RepositoryDetailActivity, Observer {
             when (it) {
@@ -154,11 +156,7 @@ class RepositoryDetailActivity : AppCompatActivity(), CoroutineScope {
             }
         })
 
-        val repository = intent.getParcelableExtra<Repo>(EXTRA_REPOSITORY)
-
         title = RepoNameHelper.formatRepoName(toolbar.context, repository)
-
-        viewModel?.initWithRepository(repository.owner.login, repository.name)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
