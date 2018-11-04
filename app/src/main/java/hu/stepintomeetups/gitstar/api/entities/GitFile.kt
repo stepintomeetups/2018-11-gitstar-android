@@ -8,9 +8,9 @@ package hu.stepintomeetups.gitstar.api.entities
 import android.util.Base64
 import io.gsonfire.annotations.PostDeserialize
 
-data class GitFile(val name: String, val content: String?) {
+data class GitFile(val name: String, val content: String?, val encoding: String?) {
     // required by gson
-    constructor() : this("", null)
+    constructor() : this("", null, null)
 
     @Transient
     var decodedContents: String? = null
@@ -18,7 +18,8 @@ data class GitFile(val name: String, val content: String?) {
     @PostDeserialize
     fun postDeserialize() {
         decodedContents = when {
-            content != null -> String(Base64.decode(content, 0), charset("utf-8"))
+            content == null -> null
+            encoding == "base64" -> String(Base64.decode(content, 0), charset("utf-8"))
             else -> null
         }
     }
