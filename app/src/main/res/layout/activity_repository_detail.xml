@@ -44,8 +44,7 @@
                 android:paddingBottom="36dp"
                 android:clipToPadding="false"
                 android:clipChildren="false"
-                android:orientation="vertical"
-                android:animateLayoutChanges="true">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -101,8 +100,8 @@
                             android:paddingLeft="16dp"
                             android:paddingRight="16dp"
                             android:paddingBottom="8dp"
-                            android:drawableLeft="@drawable/ic_source_stars_seconday_14dp"
-                            android:drawableStart="@drawable/ic_source_stars_seconday_14dp"
+                            android:drawableLeft="@drawable/ic_source_stars_secondary_14dp"
+                            android:drawableStart="@drawable/ic_source_stars_secondary_14dp"
                             android:textColor="?android:attr/textColorPrimary"
                             android:drawablePadding="8dp"
                             tools:text="329 stars" />
@@ -229,7 +228,7 @@
 
         </androidx.core.widget.NestedScrollView>
 
-        <androidx.core.widget.ContentLoadingProgressBar
+        <ProgressBar
             style="?android:attr/progressBarStyle"
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"

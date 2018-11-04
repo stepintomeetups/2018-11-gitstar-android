@@ -50,15 +50,15 @@ class RepositoryListFragment : Fragment(), RepositoryClickListener {
         viewModel.data.observe(this@RepositoryListFragment, Observer {
             when (it) {
                 is DataRequestState.Loading -> {
-                    progressBar.show()
+                    progressBar.visibility = View.VISIBLE
                     recyclerView.visibility = View.GONE
                 }
                 is DataRequestState.Error -> {
-                    progressBar.hide()
+                    progressBar.visibility = View.GONE
                     recyclerView.visibility = View.GONE
                 }
                 is DataRequestState.Success -> {
-                    progressBar.hide()
+                    progressBar.visibility = View.GONE
                     recyclerView.visibility = View.VISIBLE
                     adapter.items = it.data
                 }

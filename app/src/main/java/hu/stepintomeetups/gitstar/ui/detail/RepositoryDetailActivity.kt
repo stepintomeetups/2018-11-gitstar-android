@@ -88,15 +88,15 @@ class RepositoryDetailActivity : AppCompatActivity(), CoroutineScope {
         viewModel?.data?.observe(this@RepositoryDetailActivity, Observer {
             when (it) {
                 is DataRequestState.Loading -> {
-                    progressBar.show()
+                    progressBar.visibility = View.VISIBLE
                     mainContainer.visibility = View.GONE
                 }
                 is DataRequestState.Error -> {
-                    progressBar.hide()
+                    progressBar.visibility = View.GONE
                     mainContainer.visibility = View.GONE
                 }
                 is DataRequestState.Success -> {
-                    progressBar.hide()
+                    progressBar.visibility = View.GONE
                     mainContainer.visibility = View.VISIBLE
 
                     descriptionView.text = it.data.repo.description

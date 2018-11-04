@@ -16,7 +16,7 @@
         tools:listitem="@layout/row_repository"
         tools:itemCount="12" />
 
-    <androidx.core.widget.ContentLoadingProgressBar
+    <ProgressBar
         style="?android:attr/progressBarStyle"
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
