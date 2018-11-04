@@ -79,6 +79,15 @@ class RepositoryDetailActivity : AppCompatActivity(), CoroutineScope {
         adapter = CommitListAdapter()
         commitsRecyclerView.adapter = adapter
 
+        starButton.setOnClickListener {
+            starButton.isEnabled = false
+
+            when (starButton.isChecked) {
+                true -> viewModel?.unstarRepository()
+                false -> viewModel?.starRepository()
+            }
+        }
+
         viewReadmeButton.setOnClickListener {
             Toast.makeText(this@RepositoryDetailActivity, R.string.not_implemented_yet, Toast.LENGTH_SHORT).show()
         }

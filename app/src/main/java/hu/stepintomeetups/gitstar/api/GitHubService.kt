@@ -21,9 +21,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface GitHubService {
     @GET("user")
@@ -34,6 +32,12 @@ interface GitHubService {
 
     @GET("user/starred/{owner}/{repo}")
     fun isRepoStarred(@Path("owner") owner: String, @Path("repo") repo: String): Deferred<Response<Unit>>
+
+    @PUT("user/starred/{owner}/{repo}")
+    fun starRepo(@Path("owner") owner: String, @Path("repo") repo: String): Deferred<Response<Unit>>
+
+    @DELETE("user/starred/{owner}/{repo}")
+    fun unstarRepo(@Path("owner") owner: String, @Path("repo") repo: String): Deferred<Response<Unit>>
 
     @GET("search/repositories")
     fun searchRepositories(@Query("q") q: String): Deferred<SearchRepositoriesResult>

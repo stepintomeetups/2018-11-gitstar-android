@@ -13,6 +13,7 @@ import hu.stepintomeetups.gitstar.api.entities.Commit
 import hu.stepintomeetups.gitstar.ui.common.CoroutineViewModel
 import hu.stepintomeetups.gitstar.ui.common.DataRequestState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -64,6 +65,40 @@ class RepositoryDetailViewModel : CoroutineViewModel() {
                     is JsonSyntaxException -> { e.printStackTrace(); data.postValue(DataRequestState.Error(e)) }
                     else -> throw e
                 }
+            }
+        }
+    }
+
+    fun starRepository() = launch(Dispatchers.IO + NonCancellable) {
+        val ownerName = ownerName ?: return@launch
+        val repositoryName = repositoryName ?: return@launch
+
+        try {
+            GitHubService.instance.starRepo(ownerName, repositoryName).await()
+        } catch (e: Throwable) {
+            if (e is JsonSyntaxException)
+                e.printStackTrace()
+
+            when (e) {
+                is IOException -> throw e
+                else -> throw IOException(e)
+            }
+        }
+    }
+
+    fun unstarRepository() = launch(Dispatchers.IO + NonCancellable) {
+        val ownerName = ownerName ?: return@launch
+        val repositoryName = repositoryName ?: return@launch
+
+        try {
+            GitHubService.instance.unstarRepo(ownerName, repositoryName).await()
+        } catch (e: Throwable) {
+            if (e is JsonSyntaxException)
+                e.printStackTrace()
+
+            when (e) {
+                is IOException -> throw e
+                else -> throw IOException(e)
             }
         }
     }
