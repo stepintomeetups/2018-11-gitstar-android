@@ -6,8 +6,10 @@
 package hu.stepintomeetups.gitstar.ui.detail
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -97,12 +99,24 @@ class RepositoryDetailActivity : AppCompatActivity(), CoroutineScope {
                     progressBar.hide()
                     mainContainer.visibility = View.VISIBLE
 
+                    descriptionView.text = it.data.repo.description
+                    descriptionView.visibility = if (it.data.repo.description?.isNotBlank() == true) View.VISIBLE else View.GONE
+
                     starsCountView.text = starsCountView.resources.getQuantityString(R.plurals.repo_stars_count_fmt, it.data.repo.stargazers_count, it.data.repo.stargazers_count)
                     watchersCountView.text = starsCountView.resources.getQuantityString(R.plurals.repo_watchers_count_fmt, it.data.repo.subscribers_count, it.data.repo.subscribers_count)
                     openIssuesCountView.text = starsCountView.resources.getQuantityString(R.plurals.repo_open_issues_count_fmt, it.data.repo.open_issues_count, it.data.repo.open_issues_count)
 
-                    descriptionView.text = it.data.repo.description
-                    descriptionView.visibility = if (it.data.repo.description?.isNotBlank() == true) View.VISIBLE else View.GONE
+                    if (!it.data.repo.topics.isNullOrEmpty()) {
+                        topicsContainer.removeAllViews()
+                        val inflater = LayoutInflater.from(topicsContainer.context)
+                        it.data.repo.topics?.forEach { topic ->
+                            val view = inflater.inflate(R.layout.row_topic, topicsContainer, false) as TextView
+                            view.text = topic
+                            topicsContainer.addView(view)
+                        }
+                        topicsContainer.visibility = View.VISIBLE
+                    } else
+                        topicsContainer.visibility = View.GONE
 
                     noCommitsView.visibility = if (it.data.commits.isEmpty()) View.VISIBLE else View.GONE
                     commitsRecyclerView.visibility = if (!it.data.commits.isEmpty()) View.VISIBLE else View.GONE

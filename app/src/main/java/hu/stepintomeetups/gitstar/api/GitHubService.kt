@@ -70,7 +70,7 @@ interface GitHubService {
                     throw AssertionError("GitHubService.httpClient: Invalid host detected")
 
                 chain.proceed(chain.request().newBuilder()
-                    .addHeader("Accept", "application/vnd.github.v3+json")
+                    .addHeader("Accept", "application/vnd.github.mercy-preview+json")
                     .addHeader("Authorization", "token " + BuildConfig.GITHUB_OAUTH_TOKEN)
                     .addHeader("User-Agent", "GitStar-Android-Demo")
                     .build())

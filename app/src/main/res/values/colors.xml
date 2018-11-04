@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#560027</color>
     <color name="colorAccent">#f57c00</color>
     <color name="markdown_block_color">#f5d0e1</color>
+    <color name="repo_topic_color">#20f57c00</color>
 </resources>
