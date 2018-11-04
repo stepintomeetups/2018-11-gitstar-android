@@ -83,6 +83,9 @@ dependencies {
     implementation 'com.evernote:android-state:1.4.1'
     implementation 'com.nex3z:flow-layout:1.2.4'
 
+    implementation 'com.facebook.stetho:stetho:1.5.0'
+    implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
+
     kapt 'androidx.lifecycle:lifecycle-compiler:2.0.0'
     kapt 'com.github.bumptech.glide:compiler:4.8.0'
     kapt 'com.evernote:android-state-processor:1.4.1'

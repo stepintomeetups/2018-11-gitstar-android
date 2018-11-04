@@ -6,6 +6,7 @@
 package hu.stepintomeetups.gitstar
 
 import android.app.Application
+import com.facebook.stetho.Stetho
 import timber.log.Timber
 
 class App : Application() {
@@ -14,8 +15,11 @@ class App : Application() {
 
         App.instance = this
 
-        if (BuildConfig.DEBUG)
+        if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
+
+            Stetho.initializeWithDefaults(this)
+        }
     }
 
     companion object {

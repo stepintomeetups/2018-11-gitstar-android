@@ -14,6 +14,7 @@ import hu.stepintomeetups.gitstar.api.entities.GitFile
 import hu.stepintomeetups.gitstar.api.entities.Repo
 import hu.stepintomeetups.gitstar.api.entities.User
 import hu.stepintomeetups.gitstar.api.responses.SearchRepositoriesResult
+import hu.stepintomeetups.gitstar.helpers.CommonHttpClient
 import io.gsonfire.GsonFireBuilder
 import kotlinx.coroutines.Deferred
 import okhttp3.OkHttpClient
@@ -62,10 +63,7 @@ interface GitHubService {
         }
 
         private val httpClient: OkHttpClient by lazy {
-            val builder = OkHttpClient.Builder()
-
-            if (BuildConfig.DEBUG)
-                builder.addNetworkInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC })
+            val builder = CommonHttpClient.newBuilder()
 
             builder.addNetworkInterceptor { chain ->
                 if (chain.request().url().host() != "api.github.com")
