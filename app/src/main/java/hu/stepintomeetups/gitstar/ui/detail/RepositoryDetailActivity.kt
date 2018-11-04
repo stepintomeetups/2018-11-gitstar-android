@@ -106,6 +106,8 @@ class RepositoryDetailActivity : AppCompatActivity(), CoroutineScope {
                     watchersCountView.text = starsCountView.resources.getQuantityString(R.plurals.repo_watchers_count_fmt, it.data.repo.subscribers_count, it.data.repo.subscribers_count)
                     openIssuesCountView.text = starsCountView.resources.getQuantityString(R.plurals.repo_open_issues_count_fmt, it.data.repo.open_issues_count, it.data.repo.open_issues_count)
 
+                    starButton.isChecked = it.data.isStarred
+
                     if (!it.data.repo.topics.isNullOrEmpty()) {
                         topicsContainer.removeAllViews()
                         val inflater = LayoutInflater.from(topicsContainer.context)

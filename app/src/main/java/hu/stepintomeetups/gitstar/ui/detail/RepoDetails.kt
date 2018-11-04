@@ -9,4 +9,4 @@ import hu.stepintomeetups.gitstar.api.entities.Commit
 import hu.stepintomeetups.gitstar.api.entities.GitFile
 import hu.stepintomeetups.gitstar.api.entities.Repo
 
-data class RepoDetails(val repo: Repo, val readme: GitFile?, val commits: List<Commit>)
+data class RepoDetails(val repo: Repo, val readme: GitFile?, val commits: List<Commit>, val isStarred: Boolean)

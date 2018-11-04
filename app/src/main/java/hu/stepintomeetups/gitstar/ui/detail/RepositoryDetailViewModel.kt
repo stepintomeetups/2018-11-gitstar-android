@@ -41,12 +41,20 @@ class RepositoryDetailViewModel : CoroutineViewModel() {
                 val deferredRepo = GitHubService.instance.getRepositoryDetails(ownerName, repositoryName)
                 val deferredReadme = GitHubService.instance.getReadmeForRepository(ownerName, repositoryName)
                 val deferredCommits = GitHubService.instance.getCommitsForRepository(ownerName, repositoryName)
+                val deferredIsStarred = GitHubService.instance.isRepoStarred(ownerName, repositoryName)
 
                 val repo = deferredRepo.await()
                 val readme = try { deferredReadme.await() } catch (e: HttpException) { if (e.code() == 404) null else throw e }
                 val commits = try { deferredCommits.await() } catch (e: HttpException) { if (e.code() == 409) emptyList<Commit>() else throw e }
 
-                val details = RepoDetails(repo, readme, commits.subList(0, 5.coerceAtMost(commits.size)))
+                val isStarredResponse = deferredIsStarred.await()
+                val isStarred = when (isStarredResponse.code()) {
+                    204 -> true
+                    404 -> false
+                    else -> throw HttpException(isStarredResponse)
+                }
+
+                val details = RepoDetails(repo, readme, commits.subList(0, 5.coerceAtMost(commits.size)), isStarred)
 
                 data.postValue(DataRequestState.Success(details))
             } catch (e: Throwable) {

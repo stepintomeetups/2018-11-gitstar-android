@@ -18,6 +18,7 @@ import io.gsonfire.GsonFireBuilder
 import kotlinx.coroutines.Deferred
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -31,11 +32,8 @@ interface GitHubService {
     @GET("user/repos")
     fun listOwnRepos(): Deferred<List<Repo>>
 
-    @GET("users/{user}/repos")
-    fun listReposForUser(@Path("user") user: String): Deferred<List<Repo>>
-
-    @GET("orgs/{organization}/repos")
-    fun listReposForOrganization(@Path("organization") organization: String): Deferred<List<Repo>>
+    @GET("user/starred/{owner}/{repo}")
+    fun isRepoStarred(@Path("owner") owner: String, @Path("repo") repo: String): Deferred<Response<Unit>>
 
     @GET("search/repositories")
     fun searchRepositories(@Query("q") q: String): Deferred<SearchRepositoriesResult>
