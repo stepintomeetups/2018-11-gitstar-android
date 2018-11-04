@@ -18,6 +18,7 @@ import hu.stepintomeetups.gitstar.ui.common.DataRequestState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -39,9 +40,11 @@ class RepositoryDetailViewModel(private val ownerName: String, private val  repo
                 val commits = try { deferredCommits.await() } catch (e: HttpException) { if (e.code() == 409) emptyList<Commit>() else throw e }
                 val isStarred = deferredIsStarred.await()
 
-                val details = RepoDetails(repo, readme, commits.subList(0, 5.coerceAtMost(commits.size)), isStarred)
+                withContext(Dispatchers.Main) {
+                    val details = RepoDetails.initFrom(repo, readme, commits.subList(0, 5.coerceAtMost(commits.size)), isStarred)
 
-                data.postValue(DataRequestState.Success(details))
+                    data.value = DataRequestState.Success(details)
+                }
             } catch (e: Throwable) {
                 when (e) {
                     is IOException -> data.postValue(DataRequestState.Error(e))

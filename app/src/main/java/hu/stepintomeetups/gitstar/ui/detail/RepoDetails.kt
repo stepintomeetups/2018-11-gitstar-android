@@ -5,8 +5,29 @@
 
 package hu.stepintomeetups.gitstar.ui.detail
 
+import androidx.lifecycle.MutableLiveData
 import hu.stepintomeetups.gitstar.api.entities.Commit
 import hu.stepintomeetups.gitstar.api.entities.GitFile
 import hu.stepintomeetups.gitstar.api.entities.Repo
 
-data class RepoDetails(val repo: Repo, val readme: GitFile?, val commits: List<Commit>, val isStarred: Boolean)
+data class RepoDetails(val repo: MutableLiveData<Repo>, val readme: MutableLiveData<GitFile?>,
+                       val commits: MutableLiveData<List<Commit>>, val isStarred: MutableLiveData<Boolean>) {
+    companion object {
+        fun initFrom(repo: Repo, readme: GitFile?, commits: List<Commit>, isStarred: Boolean): RepoDetails {
+            return RepoDetails(
+                MutableLiveData<Repo>().apply {
+                    value = repo
+                },
+                MutableLiveData<GitFile?>().apply {
+                    value = readme
+                },
+                MutableLiveData<List<Commit>>().apply {
+                    value = commits
+                },
+                MutableLiveData<Boolean>().apply {
+                    value = isStarred
+                }
+            )
+        }
+    }
+}

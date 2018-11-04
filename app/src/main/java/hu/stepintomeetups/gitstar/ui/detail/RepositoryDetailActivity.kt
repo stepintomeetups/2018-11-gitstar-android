@@ -18,6 +18,8 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import hu.stepintomeetups.gitstar.R
+import hu.stepintomeetups.gitstar.api.entities.Commit
+import hu.stepintomeetups.gitstar.api.entities.GitFile
 import hu.stepintomeetups.gitstar.helpers.CommonHttpClient
 import hu.stepintomeetups.gitstar.api.entities.Repo
 import hu.stepintomeetups.gitstar.helpers.RepoNameHelper
@@ -110,48 +112,21 @@ class RepositoryDetailActivity : AppCompatActivity(), CoroutineScope {
                     progressBar.visibility = View.GONE
                     mainContainer.visibility = View.VISIBLE
 
-                    descriptionView.text = it.data.repo.description
-                    descriptionView.visibility = if (it.data.repo.description?.isNotBlank() == true) View.VISIBLE else View.GONE
+                    it.data.repo.observe(this@RepositoryDetailActivity, Observer { repo ->
+                        updateInfo(repo)
+                    })
 
-                    starsCountView.text = starsCountView.resources.getQuantityString(R.plurals.repo_stars_count_fmt, it.data.repo.stargazers_count, it.data.repo.stargazers_count)
-                    watchersCountView.text = starsCountView.resources.getQuantityString(R.plurals.repo_watchers_count_fmt, it.data.repo.subscribers_count, it.data.repo.subscribers_count)
-                    openIssuesCountView.text = starsCountView.resources.getQuantityString(R.plurals.repo_open_issues_count_fmt, it.data.repo.open_issues_count, it.data.repo.open_issues_count)
+                    it.data.isStarred.observe(this@RepositoryDetailActivity, Observer { isStarred ->
+                        updateStarred(isStarred)
+                    })
 
-                    starButton.isChecked = it.data.isStarred
+                    it.data.commits.observe(this@RepositoryDetailActivity, Observer { commits ->
+                        updateCommits(commits)
+                    })
 
-                    if (!it.data.repo.topics.isNullOrEmpty()) {
-                        topicsContainer.removeAllViews()
-                        val inflater = LayoutInflater.from(topicsContainer.context)
-                        it.data.repo.topics?.forEach { topic ->
-                            val view = inflater.inflate(R.layout.row_topic, topicsContainer, false) as TextView
-                            view.text = topic
-                            topicsContainer.addView(view)
-                        }
-                        topicsContainer.visibility = View.VISIBLE
-                    } else
-                        topicsContainer.visibility = View.GONE
-
-                    noCommitsView.visibility = if (it.data.commits.isEmpty()) View.VISIBLE else View.GONE
-                    commitsRecyclerView.visibility = if (!it.data.commits.isEmpty()) View.VISIBLE else View.GONE
-
-                    adapter?.items = it.data.commits
-
-                    if (it.data.readme != null) {
-                        viewReadmeButton.text = viewReadmeButton.context.getString(R.string.btn_view_readme, it.data.readme?.name)
-                        viewReadmeButton.visibility = View.VISIBLE
-
-                        launch(Dispatchers.Default) {
-                            val parsed = Markwon.markdown(markdownConfiguration, it.data.readme?.decodedContents ?: "")
-                            val excerpt = parsed.getFirstNLines(8)
-
-                            withContext(Dispatchers.Main) {
-                                Markwon.setText(readmeView, excerpt, BetterLinkMovementMethod.newInstance())
-                            }
-                        }
-                    } else {
-                        readmeView.setText(R.string.no_readme_found)
-                        viewReadmeButton.visibility = View.GONE
-                    }
+                    it.data.readme.observe(this@RepositoryDetailActivity, Observer { readme ->
+                        updateReadme(readme)
+                    })
                 }
             }
         })
@@ -174,6 +149,58 @@ class RepositoryDetailActivity : AppCompatActivity(), CoroutineScope {
         super.onDestroy()
 
         job.cancel()
+    }
+
+    private fun updateInfo(repo: Repo) {
+        descriptionView.text = repo.description
+        descriptionView.visibility = if (repo.description?.isNotBlank() == true) View.VISIBLE else View.GONE
+
+        starsCountView.text = starsCountView.resources.getQuantityString(R.plurals.repo_stars_count_fmt, repo.stargazers_count, repo.stargazers_count)
+        watchersCountView.text = starsCountView.resources.getQuantityString(R.plurals.repo_watchers_count_fmt, repo.subscribers_count, repo.subscribers_count)
+        openIssuesCountView.text = starsCountView.resources.getQuantityString(R.plurals.repo_open_issues_count_fmt, repo.open_issues_count, repo.open_issues_count)
+
+        if (!repo.topics.isNullOrEmpty()) {
+            topicsContainer.removeAllViews()
+            val inflater = LayoutInflater.from(topicsContainer.context)
+            repo.topics.forEach { topic ->
+                val view = inflater.inflate(R.layout.row_topic, topicsContainer, false) as TextView
+                view.text = topic
+                topicsContainer.addView(view)
+            }
+            topicsContainer.visibility = View.VISIBLE
+        } else
+            topicsContainer.visibility = View.GONE
+    }
+
+    private fun updateStarred(isStarred: Boolean) {
+        starButton.isChecked = isStarred
+        starButton.isEnabled = true
+    }
+
+    private fun updateCommits(commits: List<Commit>) {
+        noCommitsView.visibility = if (commits.isEmpty()) View.VISIBLE else View.GONE
+        commitsRecyclerView.visibility = if (!commits.isEmpty()) View.VISIBLE else View.GONE
+
+        adapter?.items = commits
+    }
+
+    private fun updateReadme(readme: GitFile?) {
+        if (readme != null) {
+            viewReadmeButton.text = viewReadmeButton.context.getString(R.string.btn_view_readme, readme.name)
+            viewReadmeButton.visibility = View.VISIBLE
+
+            launch(Dispatchers.Default) {
+                val parsed = Markwon.markdown(markdownConfiguration, readme.decodedContents ?: "")
+                val excerpt = parsed.getFirstNLines(8)
+
+                withContext(Dispatchers.Main) {
+                    Markwon.setText(readmeView, excerpt, BetterLinkMovementMethod.newInstance())
+                }
+            }
+        } else {
+            readmeView.setText(R.string.no_readme_found)
+            viewReadmeButton.visibility = View.GONE
+        }
     }
 
     companion object {
