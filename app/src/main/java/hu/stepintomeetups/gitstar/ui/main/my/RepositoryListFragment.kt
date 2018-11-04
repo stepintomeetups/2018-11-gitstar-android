@@ -65,12 +65,13 @@ class RepositoryListFragment : Fragment(), RepositoryClickListener {
             }
         })
 
-        viewModel.refreshData()
+        if (savedInstanceState == null)
+            viewModel.refreshData()
     }
 
     override fun onRepositoryClick(repo: Repo) {
         startActivity(Intent(activity, RepositoryDetailActivity::class.java).apply {
-            putExtra(RepositoryDetailActivity.EXTRA_REPOSITORY_ID, repo.id)
+            putExtra(RepositoryDetailActivity.EXTRA_REPOSITORY, repo)
         })
     }
 }

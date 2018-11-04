@@ -5,4 +5,10 @@
 
 package hu.stepintomeetups.gitstar.api.entities
 
-data class Repo(val id: Long, val name: String?, val full_name: String?, val description: String?, val stargazers_count: Int, val language: String?)
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
+data class Repo(val id: Long, val name: String, val full_name: String, val description: String?,
+                val stargazers_count: Int, val subscribers_count: Int, val open_issues_count: Int,
+                val language: String?, val owner: User) : Parcelable

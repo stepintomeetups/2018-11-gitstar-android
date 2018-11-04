@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <plurals name="repo_stars_count_fmt">
+        <item quantity="one">%1$d star</item>
+        <item quantity="other">%1$d stars</item>
+    </plurals>
+
+    <plurals name="repo_forks_count_fmt">
+        <item quantity="one">%1$d fork</item>
+        <item quantity="other">%1$d forks</item>
+    </plurals>
+
+    <plurals name="repo_watchers_count_fmt">
+        <item quantity="one">%1$d watcher</item>
+        <item quantity="other">%1$d watchers</item>
+    </plurals>
+
+    <plurals name="repo_open_issues_count_fmt">
+        <item quantity="one">%1$d open issue</item>
+        <item quantity="other">%1$d open issues</item>
+    </plurals>
+
+</resources>

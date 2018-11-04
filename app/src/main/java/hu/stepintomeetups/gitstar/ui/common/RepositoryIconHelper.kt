@@ -63,7 +63,7 @@ class RepositoryIconHelper {
 
             drawColor(backgroundColor)
 
-            val text = nameMap[repo.language] ?: repo.language ?: "?"
+            val text = nameMap[repo.language] ?: repo.language ?: "-"
 
             val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
                 textSize = 15.0f * multiplier
@@ -86,7 +86,7 @@ class RepositoryIconHelper {
         val brightness = (0.299 * backgroundColor.red + 0.587 * backgroundColor.green + 0.114 * backgroundColor.blue) / 255
 
         return when {
-            brightness < 0.5 -> 0xFFFFFFFF.toInt()
+            brightness < 0.65 -> 0xFFFFFFFF.toInt()
             else -> 0xFF000000.toInt()
         }
     }

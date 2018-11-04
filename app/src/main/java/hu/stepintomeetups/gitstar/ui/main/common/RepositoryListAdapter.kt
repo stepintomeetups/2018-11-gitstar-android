@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import hu.stepintomeetups.gitstar.R
 import hu.stepintomeetups.gitstar.api.entities.Repo
+import hu.stepintomeetups.gitstar.helpers.RepoNameHelper
 import hu.stepintomeetups.gitstar.ui.common.RepositoryIconHelper
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.row_repository.*
@@ -48,7 +49,7 @@ class RepositoryListAdapter(var clickListener: RepositoryClickListener? = null) 
         fun bindTo(repo: Repo) {
             this.item = repo
 
-            nameView.text = repo.full_name
+            nameView.text = RepoNameHelper.formatRepoName(nameView.context, repo)
             descriptionView.text = repo.description
             starsView.text = repo.stargazers_count.toString()
             iconView.setImageBitmap(repositoryIconHelper.getIconForRepository(iconView.context, repo))

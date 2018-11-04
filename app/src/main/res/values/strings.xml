@@ -3,4 +3,10 @@
     <string name="tab_my_repositories">My Repositories</string>
     <string name="tab_search">Search</string>
     <string name="search_hint">Search repositories...</string>
+    <string name="btn_view_readme">View all of %1$s</string>
+    <string name="section_readme">Readme</string>
+    <string name="no_readme_found">No readme found.</string>
+    <string name="section_latest_commits">Latest commits</string>
+    <string name="section_info">General info</string>
+    <string name="not_implemented_yet">Not implemented yet.</string>
 </resources>

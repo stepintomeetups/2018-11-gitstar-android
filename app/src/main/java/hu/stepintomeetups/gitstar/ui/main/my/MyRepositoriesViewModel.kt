@@ -7,6 +7,7 @@ package hu.stepintomeetups.gitstar.ui.main.my
 
 import androidx.annotation.MainThread
 import androidx.lifecycle.MutableLiveData
+import com.google.gson.JsonSyntaxException
 import hu.stepintomeetups.gitstar.api.GitHubService
 import hu.stepintomeetups.gitstar.api.entities.Repo
 import hu.stepintomeetups.gitstar.ui.common.CoroutineViewModel
@@ -32,6 +33,7 @@ class MyRepositoriesViewModel : CoroutineViewModel() {
                 when (e) {
                     is IOException -> data.postValue(DataRequestState.Error(e))
                     is HttpException -> data.postValue(DataRequestState.Error(e))
+                    is JsonSyntaxException -> data.postValue(DataRequestState.Error(e))
                     else -> throw e
                 }
             }
