@@ -10,4 +10,8 @@
     <string name="section_info">General info</string>
     <string name="not_implemented_yet">Not implemented yet.</string>
     <string name="no_commits_yet">No commits yet.</string>
+    <string name="repository_successfully_starred">Repository starred. Yay!</string>
+    <string name="repository_successfully_unstarred">Repository unstarred. Boo :(</string>
+    <string name="failed_to_star_repository">Failed to star repository.</string>
+    <string name="failed_to_unstar_repository">Failed to remove star from repository.</string>
 </resources>

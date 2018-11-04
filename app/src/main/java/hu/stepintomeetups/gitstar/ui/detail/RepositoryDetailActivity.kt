@@ -33,6 +33,7 @@ import ru.noties.markwon.SpannableConfiguration
 import ru.noties.markwon.il.AsyncDrawableLoader
 import ru.noties.markwon.il.NetworkSchemeHandler
 import ru.noties.markwon.spans.SpannableTheme
+import java.io.IOException
 import kotlin.coroutines.CoroutineContext
 
 class RepositoryDetailActivity : AppCompatActivity(), CoroutineScope {
@@ -84,9 +85,30 @@ class RepositoryDetailActivity : AppCompatActivity(), CoroutineScope {
         starButton.setOnClickListener {
             starButton.isEnabled = false
 
-            when (starButton.isChecked) {
-                true -> viewModel?.unstarRepository()
-                false -> viewModel?.starRepository()
+            val needToStar = !starButton.isChecked
+
+            launch {
+                try {
+                    when (needToStar) {
+                        true -> viewModel?.starRepository()?.await()
+                        false -> viewModel?.unstarRepository()?.await()
+                    }
+                } catch (e: Throwable) {
+                    when (e) {
+                        is IOException -> {
+                            if (needToStar)
+                                Toast.makeText(this@RepositoryDetailActivity, R.string.failed_to_star_repository, Toast.LENGTH_SHORT).show()
+                            else
+                                Toast.makeText(this@RepositoryDetailActivity, R.string.failed_to_unstar_repository, Toast.LENGTH_SHORT).show()
+                        }
+                        else -> throw e
+                    }
+                }
+
+                if (needToStar)
+                    Toast.makeText(this@RepositoryDetailActivity, R.string.repository_successfully_starred, Toast.LENGTH_SHORT).show()
+                else
+                    Toast.makeText(this@RepositoryDetailActivity, R.string.repository_successfully_unstarred, Toast.LENGTH_SHORT).show()
             }
         }
 

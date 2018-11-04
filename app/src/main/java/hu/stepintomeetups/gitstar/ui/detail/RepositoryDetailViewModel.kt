@@ -15,20 +15,19 @@ import hu.stepintomeetups.gitstar.api.asBooleanDeferred
 import hu.stepintomeetups.gitstar.api.asUnitDeferred
 import hu.stepintomeetups.gitstar.ui.common.CoroutineViewModel
 import hu.stepintomeetups.gitstar.ui.common.DataRequestState
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.NonCancellable
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import retrofit2.HttpException
 import java.io.IOException
 
 class RepositoryDetailViewModel(private val ownerName: String, private val  repositoryName: String) : CoroutineViewModel() {
     val data = MutableLiveData<DataRequestState<RepoDetails>>()
 
+    private var initialJob: Job? = null
+
     init {
         data.value = DataRequestState.Loading()
 
-        launch(Dispatchers.IO) {
+        initialJob = launch(Dispatchers.IO) {
             try {
                 val deferredRepo = GitHubService.instance.getRepositoryDetails(ownerName, repositoryName)
                 val deferredReadme = GitHubService.instance.getReadmeForRepository(ownerName, repositoryName)
@@ -52,11 +51,13 @@ class RepositoryDetailViewModel(private val ownerName: String, private val  repo
                     is JsonSyntaxException -> { e.printStackTrace(); data.postValue(DataRequestState.Error(e)) }
                     else -> throw e
                 }
+            } finally {
+                initialJob = null
             }
         }
     }
 
-    fun starRepository() = launch(Dispatchers.IO + NonCancellable) {
+    fun starRepository() = async<Unit>(Dispatchers.IO + NonCancellable) {
         try {
             GitHubService.instance.starRepo(ownerName, repositoryName).asUnitDeferred().await()
         } catch (e: Throwable) {
@@ -66,9 +67,19 @@ class RepositoryDetailViewModel(private val ownerName: String, private val  repo
                 else -> throw e
             }
         }
+
+        initialJob?.join()
+
+        (data.value as? DataRequestState.Success)?.data?.isStarred?.postValue(true)
+
+        /*val isStarred = GitHubService.instance.isRepoStarred(ownerName, repositoryName).asBooleanDeferred().await()
+
+        withContext(Dispatchers.Main) {
+            (data.value as? DataRequestState.Success)?.data?.isStarred?.value = isStarred
+        }*/
     }
 
-    fun unstarRepository() = launch(Dispatchers.IO + NonCancellable) {
+    fun unstarRepository() = async<Unit>(Dispatchers.IO + NonCancellable) {
         try {
             GitHubService.instance.unstarRepo(ownerName, repositoryName).asUnitDeferred().await()
         } catch (e: Throwable) {
@@ -78,6 +89,10 @@ class RepositoryDetailViewModel(private val ownerName: String, private val  repo
                 else -> throw e
             }
         }
+
+        initialJob?.join()
+
+        (data.value as? DataRequestState.Success)?.data?.isStarred?.postValue(false)
     }
 
     class Factory(private val ownerName: String, private val  repositoryName: String) : ViewModelProvider.NewInstanceFactory() {
