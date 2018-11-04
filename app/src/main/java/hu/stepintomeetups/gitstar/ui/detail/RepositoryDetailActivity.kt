@@ -98,6 +98,8 @@ class RepositoryDetailActivity : AppCompatActivity(), CoroutineScope {
                         Toast.makeText(this@RepositoryDetailActivity, R.string.repository_successfully_starred, Toast.LENGTH_SHORT).show()
                     else
                         Toast.makeText(this@RepositoryDetailActivity, R.string.repository_successfully_unstarred, Toast.LENGTH_SHORT).show()
+
+                    setResult(RESULT_OK)
                 } catch (e: Throwable) {
                     when (e) {
                         is IOException -> {

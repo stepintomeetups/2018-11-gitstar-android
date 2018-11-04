@@ -12,6 +12,7 @@ import hu.stepintomeetups.gitstar.api.entities.Repo
 import hu.stepintomeetups.gitstar.ui.common.CoroutineViewModel
 import hu.stepintomeetups.gitstar.ui.common.DataRequestState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -19,10 +20,18 @@ import java.io.IOException
 class MyRepositoriesViewModel : CoroutineViewModel() {
     val data = MutableLiveData<DataRequestState<List<Repo>>>()
 
+    private var currentJob: Job? = null
+
     init {
         data.value = DataRequestState.Loading()
 
-        launch(Dispatchers.IO) {
+        invalidate()
+    }
+
+    fun invalidate() {
+        currentJob?.cancel()
+
+        currentJob = launch(Dispatchers.IO) {
             try {
                 val repos = GitHubService.instance.listOwnRepos().await()
 

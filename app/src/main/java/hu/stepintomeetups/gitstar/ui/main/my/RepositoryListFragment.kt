@@ -5,6 +5,7 @@
 
 package hu.stepintomeetups.gitstar.ui.main.my
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -23,8 +24,12 @@ import hu.stepintomeetups.gitstar.ui.main.common.RepositoryClickListener
 import hu.stepintomeetups.gitstar.ui.main.common.RepositoryListAdapter
 import kotlinx.android.synthetic.main.fragment_repository_list.*
 
+private const val REQUEST_CODE_DETAILS = 1
+
 class RepositoryListFragment : Fragment(), RepositoryClickListener {
-    private lateinit var adapter: RepositoryListAdapter
+    private var adapter: RepositoryListAdapter? = null
+
+    private var viewModel: MyRepositoriesViewModel? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_repository_list, container, false)
@@ -45,9 +50,9 @@ class RepositoryListFragment : Fragment(), RepositoryClickListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val viewModel = ViewModelProviders.of(this@RepositoryListFragment).get(MyRepositoriesViewModel::class.java)
+        viewModel = ViewModelProviders.of(this@RepositoryListFragment).get(MyRepositoriesViewModel::class.java)
 
-        viewModel.data.observe(this@RepositoryListFragment, Observer {
+        viewModel?.data?.observe(this@RepositoryListFragment, Observer {
             when (it) {
                 is DataRequestState.Loading -> {
                     progressBar.visibility = View.VISIBLE
@@ -63,15 +68,22 @@ class RepositoryListFragment : Fragment(), RepositoryClickListener {
                     progressBar.visibility = View.GONE
                     errorView.visibility = View.GONE
                     recyclerView.visibility = View.VISIBLE
-                    adapter.items = it.data
+                    adapter?.items = it.data
                 }
             }
         })
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            REQUEST_CODE_DETAILS -> if (resultCode == RESULT_OK) viewModel?.invalidate()
+            else -> super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
     override fun onRepositoryClick(repo: Repo) {
-        startActivity(Intent(activity, RepositoryDetailActivity::class.java).apply {
+        startActivityForResult(Intent(activity, RepositoryDetailActivity::class.java).apply {
             putExtra(RepositoryDetailActivity.EXTRA_REPOSITORY, repo)
-        })
+        }, REQUEST_CODE_DETAILS)
     }
 }

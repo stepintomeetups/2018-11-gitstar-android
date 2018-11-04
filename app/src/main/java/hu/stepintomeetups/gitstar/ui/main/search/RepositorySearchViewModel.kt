@@ -22,6 +22,8 @@ import java.io.IOException
 class RepositorySearchViewModel : CoroutineViewModel() {
     val data = MutableLiveData<DataRequestState<SearchRepositoriesResult>>()
 
+    private var q: String? = null
+
     private var currentJob: Job? = null
 
     init {
@@ -30,6 +32,12 @@ class RepositorySearchViewModel : CoroutineViewModel() {
 
     @MainThread
     fun performSearch(q: String, immediate: Boolean) {
+        this.q = q
+
+        invalidate(immediate)
+    }
+
+    fun invalidate(immediate: Boolean) {
         currentJob?.cancel()
 
         currentJob = launch(Dispatchers.IO) {
@@ -39,7 +47,8 @@ class RepositorySearchViewModel : CoroutineViewModel() {
             data.postValue(DataRequestState.Loading())
 
             // the API returns an error when q is missing or empty – we have to build a fake response instead
-            if (q.isEmpty()) {
+            val q = q
+            if (q.isNullOrEmpty()) {
                 data.postValue(createEmptyResponse())
                 return@launch
             }

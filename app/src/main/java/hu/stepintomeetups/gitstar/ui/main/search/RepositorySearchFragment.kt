@@ -5,6 +5,7 @@
 
 package hu.stepintomeetups.gitstar.ui.main.search
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -25,6 +26,8 @@ import hu.stepintomeetups.gitstar.ui.detail.RepositoryDetailActivity
 import hu.stepintomeetups.gitstar.ui.main.common.RepositoryClickListener
 import hu.stepintomeetups.gitstar.ui.main.common.RepositoryListAdapter
 import kotlinx.android.synthetic.main.fragment_repository_search.*
+
+private const val REQUEST_CODE_DETAILS = 1
 
 class RepositorySearchFragment : Fragment(), RepositoryClickListener {
     private lateinit var adapter: RepositoryListAdapter
@@ -97,9 +100,16 @@ class RepositorySearchFragment : Fragment(), RepositoryClickListener {
         })
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            REQUEST_CODE_DETAILS -> if (resultCode == RESULT_OK) viewModel?.invalidate(true)
+            else -> super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
     override fun onRepositoryClick(repo: Repo) {
-        startActivity(Intent(activity, RepositoryDetailActivity::class.java).apply {
+        startActivityForResult(Intent(activity, RepositoryDetailActivity::class.java).apply {
             putExtra(RepositoryDetailActivity.EXTRA_REPOSITORY, repo)
-        })
+        }, REQUEST_CODE_DETAILS)
     }
 }
