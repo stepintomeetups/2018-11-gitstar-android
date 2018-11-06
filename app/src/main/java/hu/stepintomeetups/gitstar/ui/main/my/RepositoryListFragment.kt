@@ -38,6 +38,16 @@ class RepositoryListFragment : Fragment(), RepositoryClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        refreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent)
+
+        refreshLayout.setOnRefreshListener {
+            viewModel?.invalidate()
+        }
+
+        retryButton.setOnClickListener {
+            viewModel?.invalidate()
+        }
+
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(recyclerView.context)
         recyclerView.itemAnimator = null
@@ -56,18 +66,20 @@ class RepositoryListFragment : Fragment(), RepositoryClickListener {
             when (it) {
                 is DataRequestState.Loading -> {
                     progressBar.visibility = View.VISIBLE
-                    errorView.visibility = View.GONE
-                    recyclerView.visibility = View.GONE
+                    errorContainer.visibility = View.GONE
+                    refreshLayout.visibility = View.GONE
                 }
                 is DataRequestState.Error -> {
                     progressBar.visibility = View.GONE
-                    errorView.visibility = View.VISIBLE
-                    recyclerView.visibility = View.GONE
+                    errorContainer.visibility = View.VISIBLE
+                    refreshLayout.visibility = View.GONE
+                    refreshLayout.isRefreshing = false
                 }
                 is DataRequestState.Success -> {
                     progressBar.visibility = View.GONE
-                    errorView.visibility = View.GONE
-                    recyclerView.visibility = View.VISIBLE
+                    errorContainer.visibility = View.GONE
+                    refreshLayout.visibility = View.VISIBLE
+                    refreshLayout.isRefreshing = false
                     adapter?.items = it.data
                 }
             }

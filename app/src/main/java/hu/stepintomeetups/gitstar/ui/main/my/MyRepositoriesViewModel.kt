@@ -23,13 +23,14 @@ class MyRepositoriesViewModel : CoroutineViewModel() {
     private var currentJob: Job? = null
 
     init {
-        data.value = DataRequestState.Loading()
-
         invalidate()
     }
 
     fun invalidate() {
         currentJob?.cancel()
+
+        if (data.value !is DataRequestState.Success)
+            data.value = DataRequestState.Loading()
 
         currentJob = launch(Dispatchers.IO) {
             try {
@@ -37,6 +38,8 @@ class MyRepositoriesViewModel : CoroutineViewModel() {
 
                 data.postValue(DataRequestState.Success(repos))
             } catch (e: Throwable) {
+                e.printStackTrace()
+
                 when (e) {
                     is IOException -> data.postValue(DataRequestState.Error(e))
                     is HttpException -> data.postValue(DataRequestState.Error(e))

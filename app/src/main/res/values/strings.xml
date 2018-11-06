@@ -15,4 +15,5 @@
     <string name="failed_to_star_repository">Failed to star repository.</string>
     <string name="failed_to_unstar_repository">Failed to remove star from repository.</string>
     <string name="network_error">Network error.</string>
+    <string name="btn_retry">Retry</string>
 </resources>
