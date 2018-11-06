@@ -32,7 +32,6 @@ android {
             props.load(new FileInputStream('keys.properties'))
 
             it.buildConfigField 'String', 'GITHUB_OAUTH_TOKEN', '"' + props.getProperty('GitHubOAuthToken') + '"'
-            it.buildConfigField 'String', 'GITHUB_USERNAME', '"' + props.getProperty('GitHubUserName') + '"'
         }
     }
 

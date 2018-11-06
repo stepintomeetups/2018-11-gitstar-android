@@ -7,4 +7,8 @@ package hu.stepintomeetups.gitstar.api.entities
 
 import java.util.*
 
-data class GitCommitUser(val name: String, val email: String, val date: Date)
+data class GitCommitUser(
+    val name: String,
+    val email: String,
+    val date: Date
+)

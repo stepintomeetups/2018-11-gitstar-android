@@ -13,12 +13,11 @@ import hu.stepintomeetups.gitstar.api.entities.Commit
 import hu.stepintomeetups.gitstar.api.entities.GitFile
 import hu.stepintomeetups.gitstar.api.entities.Repo
 import hu.stepintomeetups.gitstar.api.entities.User
-import hu.stepintomeetups.gitstar.api.responses.SearchRepositoriesResult
+import hu.stepintomeetups.gitstar.api.entities.SearchRepositoriesResult
 import hu.stepintomeetups.gitstar.helpers.CommonHttpClient
 import io.gsonfire.GsonFireBuilder
 import kotlinx.coroutines.Deferred
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

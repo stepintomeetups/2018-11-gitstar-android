@@ -5,4 +5,8 @@
 
 package hu.stepintomeetups.gitstar.api.entities
 
-data class GitCommit(val message: String, val author: GitCommitUser?, val committer: GitCommitUser?)
+data class GitCommit(
+    val message: String,
+    val author: GitCommitUser?,
+    val committer: GitCommitUser?
+)

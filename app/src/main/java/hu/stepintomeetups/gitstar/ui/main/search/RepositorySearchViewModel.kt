@@ -9,7 +9,7 @@ import androidx.annotation.MainThread
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.JsonSyntaxException
 import hu.stepintomeetups.gitstar.api.GitHubService
-import hu.stepintomeetups.gitstar.api.responses.SearchRepositoriesResult
+import hu.stepintomeetups.gitstar.api.entities.SearchRepositoriesResult
 import hu.stepintomeetups.gitstar.ui.common.CoroutineViewModel
 import hu.stepintomeetups.gitstar.ui.common.DataRequestState
 import kotlinx.coroutines.Dispatchers
@@ -69,6 +69,12 @@ class RepositorySearchViewModel : CoroutineViewModel() {
     }
 
     private fun createEmptyResponse(): DataRequestState<SearchRepositoriesResult> {
-        return DataRequestState.Success(SearchRepositoriesResult(0, false, ArrayList()))
+        return DataRequestState.Success(
+            SearchRepositoriesResult(
+                0,
+                false,
+                ArrayList()
+            )
+        )
     }
 }

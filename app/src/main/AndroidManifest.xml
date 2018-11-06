@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools" package="hu.stepintomeetups.gitstar">
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="hu.stepintomeetups.gitstar">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -16,15 +18,12 @@
 
         <activity android:name=".ui.main.MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.detail.RepositoryDetailActivity">
-
-        </activity>
+        <activity android:name=".ui.detail.RepositoryDetailActivity" />
 
     </application>
 

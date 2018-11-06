@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GitStar</string>
+    <string name="app_name" translatable="false">GitStar</string>
     <string name="tab_my_repositories">My Repositories</string>
     <string name="tab_search">Search</string>
     <string name="search_hint">Search repositories...</string>
